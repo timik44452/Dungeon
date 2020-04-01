@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92d71fd41db30649b91debb6ca0c0a9, type: 3}
+  m_Name: SkillDatabase
+  m_EditorClassIdentifier: 
+  skills:
+  - name: bow
+    mana: 0
+    power: 0
+    icon: {fileID: 2800000, guid: 228768b29d913b94a8bb6c6bf86b0815, type: 3}
+    effects:
+    - {fileID: 11400000, guid: 18ba215862b2b7f479de86e4388869a9, type: 2}
+  - name: sword
+    mana: 0
+    power: 0
+    icon: {fileID: 2800000, guid: 88d80bc273336b9469e292915e2d3a45, type: 3}
+    effects:
+    - {fileID: 11400000, guid: 18ba215862b2b7f479de86e4388869a9, type: 2}
+  - name: gun
+    mana: 0
+    power: 0
+    icon: {fileID: 2800000, guid: d87a165042be11143a45184a98dda808, type: 3}
+    effects:
+    - {fileID: 11400000, guid: 18ba215862b2b7f479de86e4388869a9, type: 2}
