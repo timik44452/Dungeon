@@ -9,6 +9,7 @@ public class Skill
 
     public float mana;
     public float power;
+    public float reloadingTime;
 
     public Texture icon;
 
@@ -19,6 +20,7 @@ public class Skill
         effects = new List<SkillEffect>();
     }
 
+    //TODO: bad is bad
     public static Skill CombineSkills(params Skill[] skills)
     {
         Skill result = new Skill();
@@ -32,6 +34,7 @@ public class Skill
 
             result.mana += skill.mana;
             result.power += skill.power;
+            result.reloadingTime += skill.reloadingTime;
 
             result.effects.AddRange(skill.effects);
         }

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour, ISkillEffectListener
 {
-    public event Action OnWasted;
-    public event Action OnHealthChanged;
-    public event Action<float> OnDamaged;
-    public event Action<float> OnHealing;
+    public event UnityEventHandler OnWasted;
+    public event UnityEventHandler OnHealthChanged;
+    public event UnityEventHandler<float> OnDamaged;
+    public event UnityEventHandler<float> OnHealing;
 
     public float initHealth = 100.0F;
 
@@ -24,7 +24,7 @@ public class Health : MonoBehaviour, ISkillEffectListener
         safe_health = new Protection.SafeFloat(initHealth);
     }
 
-    public void Damage(float value)
+    public void Damage(Component sender, float value)
     {
         if (value == 0)
         {
@@ -33,17 +33,17 @@ public class Health : MonoBehaviour, ISkillEffectListener
 
         Value = Mathf.Max(Value - value, 0);
 
-        OnDamaged?.Invoke(value);
+        OnDamaged?.Invoke(sender, value);
 
         if (Value == 0)
         {
-            OnWasted?.Invoke();
+            OnWasted?.Invoke(sender);
         }
 
-        OnHealthChanged?.Invoke();
+        OnHealthChanged?.Invoke(sender);
     }
 
-    public void Healing(float value)
+    public void Healing(Component sender, float value)
     {
         if (value == 0)
         {
@@ -52,21 +52,38 @@ public class Health : MonoBehaviour, ISkillEffectListener
 
         Value = Mathf.Max(Value + value, 0);
 
-        OnHealing?.Invoke(value);
+        OnHealing?.Invoke(sender, value);
 
-        OnHealthChanged?.Invoke();
+        OnHealthChanged?.Invoke(sender);
     }
 
-    public void Invoke(Skill skill)
+    public void EffectInvoke(Component sender, IEnumerable<SkillEffect> effects)
     {
-        foreach (SkillEffect effect in skill.effects)
+        foreach (SkillEffect effect in effects)
         {
-            if (effect is DamageEffect)
+            if (TryGetEffect(effect, out DamageEffect damageEffect))
             {
-                var damageEffect = (DamageEffect)effect;
+                Damage(sender, damageEffect.damage);
+            }
 
-                Damage(damageEffect.damage);
+            if (TryGetEffect(effect, out HealEffect healEffect))
+            {
+                Healing(sender, healEffect.heal);
             }
         }
+    }
+
+    private bool TryGetEffect<T>(object value, out T effect) where T : SkillEffect
+    {
+        if (value is T)
+        {
+            effect = (T)value;
+
+            return true;
+        }
+
+        effect = null;
+
+        return false;
     }
 }

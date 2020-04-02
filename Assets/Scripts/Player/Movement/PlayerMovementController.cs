@@ -69,6 +69,10 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Update()
     {
+        bool is_move =
+            Mathf.Abs(vertical) > inputThresold ||
+            Mathf.Abs(horizontal) > inputThresold;
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             sprint = 0.25F;
@@ -76,13 +80,6 @@ public class PlayerMovementController : MonoBehaviour
 
         verticalAxisController.Update(vertical, Time.deltaTime);
         horizontalAxisController.Update(horizontal, Time.deltaTime);
-    }
-
-    private void FixedUpdate()
-    {
-        bool is_move =
-            Mathf.Abs(vertical) > inputThresold ||
-            Mathf.Abs(horizontal) > inputThresold;
 
         if (is_move)
         {
@@ -103,9 +100,13 @@ public class PlayerMovementController : MonoBehaviour
         jerk = Mathf.Clamp01(jerk);
         move = Mathf.Clamp01(move);
 
-        Vector3 force = 
-            move * Mathf.Lerp(movementConfiguration.walkSpeed, movementConfiguration.runSpeed, sprint) * direction *
-            Mathf.Lerp(1, movementConfiguration.jerkPower, jerk) + gravityForce;
+        Vector3 force =  
+            move * Mathf.Lerp(movementConfiguration.walkSpeed, movementConfiguration.runSpeed, sprint) * direction +
+            jerk * movementConfiguration.jerkPower * direction;
+
+        force *= Time.deltaTime;
+
+        force += gravityForce;
 
         characterController.Move(force);
 
@@ -120,7 +121,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         else
         {
-            gravityForce -= Vector3.up * movementConfiguration.gravity;
+            gravityForce -= Vector3.up * movementConfiguration.gravity * Time.deltaTime;
         }
     }
 }

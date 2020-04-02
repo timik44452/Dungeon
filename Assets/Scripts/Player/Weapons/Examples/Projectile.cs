@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
     {
         foreach (var effectListener in collision.gameObject.GetComponents<ISkillEffectListener>())
         {
-            effectListener.Invoke(skill);
+            effectListener.EffectInvoke(this, skill.effects);
         }
 
         Destroy(gameObject);    

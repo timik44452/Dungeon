@@ -31,7 +31,7 @@ public class CameraController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5F * Time.deltaTime);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (Input.GetMouseButton(0))
         {

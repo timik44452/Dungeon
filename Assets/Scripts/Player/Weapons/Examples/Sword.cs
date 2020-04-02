@@ -9,9 +9,14 @@ public class Sword : Weapon
         defaultSkill = ResourceUtility.skillDatabase.GetSkill("sword");    
     }
 
+    private void Update()
+    {
+        reloadingTimer -= Time.deltaTime;
+    }
+
     public override void Invoke(ITarget target, Skill skill)
     {
-        if(target == null)
+        if(IsReloading || target == null)
         {
             return;
         }
@@ -27,7 +32,9 @@ public class Sword : Weapon
 
         foreach (var effectListener in target.gameObject.GetComponents<ISkillEffectListener>())
         {
-            effectListener.Invoke(attackSkill);
+            effectListener.EffectInvoke(this, attackSkill.effects);
         }
+
+        reloadingTimer = attackSkill.reloadingTime;
     }
 }

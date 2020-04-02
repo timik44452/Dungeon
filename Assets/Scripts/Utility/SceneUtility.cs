@@ -6,10 +6,10 @@ using UnityEngine;
 public class SceneUtility
 {
     public static GameObject Player
-    { 
+    {
         get
         {
-            if(s_player == null)
+            if (s_player == null)
             {
                 s_player = FindPlayer();
             }
@@ -23,7 +23,7 @@ public class SceneUtility
         {
             if (s_targets == null)
             {
-                s_targets = FindTargets();
+                s_targets = FindObjects<ITarget>();
             }
 
             s_targets.RemoveAll(x => x == null);
@@ -35,7 +35,11 @@ public class SceneUtility
 
     private static GameObject s_player = null;
     private static List<ITarget> s_targets = null;
-    private static Dictionary<System.Type, IList> componentRegister = null;
+    private static Dictionary<System.Type, IList> componentRegister = new Dictionary<System.Type, IList>()
+    {
+        { typeof(ITarget), s_targets }
+    };
+
 
     public static void CreateObject(GameObject prototype, Transform parent = null)
     {
@@ -53,25 +57,25 @@ public class SceneUtility
         RegisterInterfaces(gameObject);
     }
 
-    public static List<ITarget> FindTargets()
+    public static List<T> FindObjects<T>()
     {
-        List<ITarget> targets = new List<ITarget>();
+        List<T> targets = new List<T>();
 
         foreach (GameObject gameObject in Object.FindObjectsOfType<GameObject>())
-            targets.AddRange(gameObject.GetComponents<ITarget>());
+        {
+            targets.AddRange(gameObject.GetComponents<T>());
+        }
 
         return targets;
     }
 
-    private static GameObject FindPlayer()
+    public static GameObject FindPlayer()
     {
         return GameObject.FindGameObjectWithTag("Player");
     }
 
     private static void RegisterInterfaces(GameObject gameObject)
     {
-        componentRegister.Add(typeof(ITarget), s_targets);
-
         foreach (var key in componentRegister)
         {
             key.Value.Add(gameObject.GetComponent(key.Key));

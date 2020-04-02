@@ -21,7 +21,7 @@ public class TargetSystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (TargetFix || Target == null)
+            if (TargetFix || ITargetIsNull(Target))
             {
                 ChangeTarget();
             }
@@ -29,7 +29,7 @@ public class TargetSystem : MonoBehaviour
             TargetFix = true;
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             TargetFix = false;
         }
@@ -40,16 +40,17 @@ public class TargetSystem : MonoBehaviour
         }
     }
 
-    public void FindActualTarget()
+    private void FindActualTarget()
     {
         var viewedTargets = m_targets.FindAll(target => CheckTarget_RECTMETHOD(target));
 
         float minimalDistance = float.MaxValue;
+
         ITarget currentTarget = null;
 
         foreach (ITarget target in viewedTargets)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
+            float distance = Vector3.Distance(SceneUtility.Player.transform.position, target.transform.position);
 
             if (minimalDistance > distance)
             {
@@ -62,13 +63,13 @@ public class TargetSystem : MonoBehaviour
         ChangeTarget(currentTarget);
     }
 
-    public void ChangeTarget()
+    private void ChangeTarget()
     {
         var viewedTargets = m_targets.FindAll(target => CheckTarget_ANGLEMETHOD(target));
 
         int index = 0;
 
-        if (Target != null)
+        if (!ITargetIsNull(Target))
         {
             index = viewedTargets.IndexOf(Target) + 1;
         }
@@ -86,7 +87,7 @@ public class TargetSystem : MonoBehaviour
 
     public void ChangeTarget(ITarget target)
     {
-        if(Target == target)
+        if (target == Target)
         {
             return;
         }
@@ -98,6 +99,11 @@ public class TargetSystem : MonoBehaviour
 
     private bool CheckTarget_RECTMETHOD(ITarget target)
     {
+        if (ITargetIsNull(target))
+        {
+            return false;
+        }
+
         Vector2 viewportSize = new Vector2(Screen.width * 0.5F, Screen.height * 0.75F);
 
         Rect viewport = new Rect((Screen.width - viewportSize.x) * 0.5F, (Screen.height - viewportSize.y) * 0.5F, viewportSize.x, viewportSize.y);
@@ -107,6 +113,11 @@ public class TargetSystem : MonoBehaviour
 
     private bool CheckTarget_ANGLEMETHOD(ITarget target)
     {
+        if (ITargetIsNull(target))
+        {
+            return false;
+        }
+
         Vector3 targetDirection = (target.transform.position - Camera.main.transform.position).normalized;
         Vector3 cameraDirection = Camera.main.transform.forward;
 
@@ -114,5 +125,10 @@ public class TargetSystem : MonoBehaviour
         cameraDirection.y = 0;
 
         return Vector3.Angle(targetDirection, cameraDirection) < Camera.main.fieldOfView;
+    }
+
+    public static bool ITargetIsNull(ITarget target)
+    {
+        return !(target as MonoBehaviour);
     }
 }
