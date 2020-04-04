@@ -2,33 +2,59 @@
 using UnityEngine.UI;
 
 using InventorySystem;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Inventory), typeof(PickUpController))]
 public class InventoryUIController : MonoBehaviour
 {
-    public GameObject menuUIElement;
+    public UIContextMenu mainContexMenu;
     public GameObject actionUIElement;
-
-    private bool is_opened = false;
 
     private Inventory inventory;
     private PickUpController pickUpController;
 
-    
+    #region Context menu items
+    private ContextMenuItem inventoryItem = new ContextMenuItem("Inventory");
+    private ContextMenuItem skillsItem = new ContextMenuItem("Skills");
+    private ContextMenuItem weaponsItem = new ContextMenuItem("Weapons");
+
+    private ContextMenuItem[] items;
+    #endregion
+
     private void Start()
     {
         inventory = GetComponent<Inventory>();
         pickUpController = GetComponent<PickUpController>();
+
+        inventory.OnInventoryChanged += OnInventoryChanged;
+
+        items = new ContextMenuItem[]
+        {
+            inventoryItem,
+            skillsItem,
+            weaponsItem
+        };
+    }
+
+    private void OnInventoryChanged(Component sender)
+    {
+        List<ContextMenuItem> menuItems = new List<ContextMenuItem>();
+
+        foreach (var item in inventory.items)
+        {
+            ContextMenuItem menuItem = new ContextMenuItem(item.name);
+
+            menuItems.Add(menuItem);
+        }
+
+        inventoryItem.menuItems = menuItems.ToArray();
+
+        mainContexMenu.SetMenuItems(items);
     }
 
     private void Update()
     {
-        menuUIElement.transform.position = (Vector2)Camera.main.WorldToScreenPoint(transform.position) + Vector2.right * Screen.width * 0.05F;
-
-        if (menuUIElement.activeSelf != is_opened)
-        {
-            menuUIElement.SetActive(is_opened);
-        }
+        mainContexMenu.transform.position = (Vector2)Camera.main.WorldToScreenPoint(transform.position) + Vector2.right * Screen.width * 0.05F;
 
         if (actionUIElement.activeSelf != pickUpController.currentItem)
         {
@@ -43,7 +69,14 @@ public class InventoryUIController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                is_opened = !is_opened;
+                if (mainContexMenu.IsOpened)
+                {
+                    mainContexMenu.Hide();
+                }
+                else
+                {
+                    mainContexMenu.Show(items);
+                }
             }
         }
 

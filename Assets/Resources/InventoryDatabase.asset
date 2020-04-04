@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063751e2253917b4aa09b82245017f96, type: 3}
   m_Name: InventoryDatabase
   m_EditorClassIdentifier: 
-  items: []
+  items:
+  - ID: 0
+    name: Small crystall
+    Count: 0

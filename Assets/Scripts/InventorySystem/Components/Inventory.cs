@@ -5,6 +5,8 @@ using InventorySystem;
 
 public class Inventory : MonoBehaviour
 {
+    public event UnityEventHandler OnInventoryChanged;
+
     public float size = 1.0F;
     public float payload = 1.0F;
 
@@ -29,13 +31,15 @@ public class Inventory : MonoBehaviour
             }
             else
             {
-                item = new Item(itemObject.ID, tempItem.Name);
+                item = new Item(itemObject.ID, tempItem.name);
             }
 
             items.Add(item);
         }
 
         item.Count++;
+
+        OnInventoryChanged?.Invoke(this);
 
         return true;
     }

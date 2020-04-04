@@ -5,19 +5,15 @@ namespace InventorySystem
     [System.Serializable]
     public class Item
     {
-        public int ID { get => id; }
-        public string Name { get => name; }
+        public int ID;
+        public string name;
 
         public int Count;
 
-        [SerializeField]
-        private int id;
-        [SerializeField]
-        private string name;
 
         public Item(int ID, string Name)
         {
-            id = ID;
+            this.ID = ID;
             name = Name;
         }
     }
