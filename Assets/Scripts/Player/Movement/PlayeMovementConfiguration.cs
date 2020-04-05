@@ -5,6 +5,7 @@
     {
         public float walkSpeed = 1.0F;
         public float runSpeed = 2.0F;
+        public float maneurSpeed = 5.0F;
 
         public float jerkPower = 1.0F;
         public float jumpPower = 2.0F;

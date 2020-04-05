@@ -14,9 +14,9 @@ public class InventoryUIController : MonoBehaviour
     private PickUpController pickUpController;
 
     #region Context menu items
-    private ContextMenuItem inventoryItem = new ContextMenuItem("Inventory");
-    private ContextMenuItem skillsItem = new ContextMenuItem("Skills");
-    private ContextMenuItem weaponsItem = new ContextMenuItem("Weapons");
+    private ContextMenuItem inventoryItem;
+    private ContextMenuItem skillsItem;
+    private ContextMenuItem weaponsItem;
 
     private ContextMenuItem[] items;
     #endregion
@@ -28,37 +28,58 @@ public class InventoryUIController : MonoBehaviour
 
         inventory.OnInventoryChanged += OnInventoryChanged;
 
+        inventoryItem = new ContextMenuItem("Inventory", ResourceUtility.resourceDatabase.inventoryIconSprite);
+        skillsItem = new ContextMenuItem("Skills", ResourceUtility.resourceDatabase.skillIconSprite);
+        weaponsItem = new ContextMenuItem("Weapons", ResourceUtility.resourceDatabase.weaponIconSprite);
+
         items = new ContextMenuItem[]
         {
             inventoryItem,
-            skillsItem,
-            weaponsItem
+            weaponsItem,
+            skillsItem
         };
     }
 
     private void OnInventoryChanged(Component sender)
     {
-        List<ContextMenuItem> menuItems = new List<ContextMenuItem>();
+        List<ContextMenuItem> inventoryMenuItems = new List<ContextMenuItem>();
+        List<ContextMenuItem> weaponMenuItems = new List<ContextMenuItem>();
 
         foreach (var item in inventory.items)
         {
-            ContextMenuItem menuItem = new ContextMenuItem(item.name);
+            ContextMenuItem menuItem = new ContextMenuItem(item.Name);
 
-            menuItems.Add(menuItem);
+            inventoryMenuItems.Add(menuItem);
         }
 
-        inventoryItem.menuItems = menuItems.ToArray();
+        foreach(var item in inventory.weapons)
+        {
+            ContextMenuItem menuItem = new ContextMenuItem(item.Name);
+
+            weaponMenuItems.Add(menuItem);
+        }
+
+        inventoryItem.menuItems = inventoryMenuItems.ToArray();
+        weaponsItem.menuItems = weaponMenuItems.ToArray();
 
         mainContexMenu.SetMenuItems(items);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         mainContexMenu.transform.position = (Vector2)Camera.main.WorldToScreenPoint(transform.position) + Vector2.right * Screen.width * 0.05F;
+    }
 
+    private void Update()
+    {
         if (actionUIElement.activeSelf != pickUpController.currentItem)
         {
             actionUIElement.SetActive(pickUpController.currentItem);
+
+            if (pickUpController.currentItem)
+            {
+                actionUIElement.GetElement<Text>("text").text = pickUpController.currentItem.name;
+            }
         }
 
         if (pickUpController.currentItem)

@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Skills/Skill Database")]
 public class SkillDatabase : ScriptableObject
 {
     public List<Skill> skills;

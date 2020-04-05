@@ -26,6 +26,18 @@ public class ResourceUtility
             return s_inventoryDatabase;
         }
     }
+    public static WeaponDatabase weaponDatabase
+    {
+        get
+        {
+            if (s_weaponDatabase == null)
+            {
+                s_weaponDatabase = Resources.Load<WeaponDatabase>(s_weaponDatabaseName);
+            }
+
+            return s_weaponDatabase;
+        }
+    }
     public static SkillDatabase skillDatabase
     {
         get
@@ -41,10 +53,12 @@ public class ResourceUtility
 
     private static ResourceDatabase s_resourceDatabase;
     private static InventoryDatabase s_inventoryDatabase;
+    private static WeaponDatabase s_weaponDatabase;
     private static SkillDatabase s_skillDatabase;
 
     private const string s_resourceDatabaseName = "ResourceDatabase";
     private const string s_inventoryDatabaseName = "InventoryDatabase";
+    private const string s_weaponDatabaseName = "WeaponDatabase";
     private const string s_skillDatabaseName = "SkillDatabase";
 
 #if UNITY_EDITOR
@@ -59,6 +73,12 @@ public class ResourceUtility
         InventoryDatabase database = ScriptableObject.CreateInstance<InventoryDatabase>();
 
         UnityEditor.AssetDatabase.CreateAsset(database, $"Assets/Resources/{s_inventoryDatabaseName}.asset");
+    }
+    public static void CreateWeaponDatabase()
+    {
+        WeaponDatabase database = ScriptableObject.CreateInstance<WeaponDatabase>();
+
+        UnityEditor.AssetDatabase.CreateAsset(database, $"Assets/Resources/{s_weaponDatabaseName}.asset");
     }
     public static void CreateSkillsDatabase()
     {

@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : ScriptableObject
 {
-    public bool IsReloading { get => reloadingTimer > 0; }
+    public string Name;
 
-    public Skill defaultSkill { get; protected set; }
+    public float reloadingTimeout = 1.0F;
 
-    
-    protected float reloadingTimer = 0.0F;
+    public SkillEffect[] effects;
 
-
-    public abstract void Invoke(ITarget target, Skill skill);
+    public abstract void Invoke(Component sender, ITarget target, Skill skill);
 }

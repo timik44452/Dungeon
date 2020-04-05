@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb75df109894714686c0a7037407ccb, type: 3}
   m_Name: ResourceDatabase
   m_EditorClassIdentifier: 
+  m_inventoryIconSprite: {fileID: 21300000, guid: 31f15b0a9440f1749a2a02736d9094f8,
+    type: 3}
+  m_skillIconSprite: {fileID: 0}
+  m_weaponIconSprite: {fileID: 21300000, guid: 6f5d84480b3ca854eaf88c0698370537, type: 3}
   m_actionIconPrefab: {fileID: 2002248703961984162, guid: 7b460dce6c733de43b05ba40b04e8b5e,
     type: 3}
   m_damageTextPrefab: {fileID: 2896717976669475031, guid: c92f4ede75f3d5e4c9cfc3cf1f5d045d,

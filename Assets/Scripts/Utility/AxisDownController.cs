@@ -27,7 +27,7 @@ public class AxisDownController
             if (sign < 0)
             {
                 m_pressCount++;
-                m_resetTimer = 0.2F;
+                m_resetTimer = 0.4F;
 
                 OnDownEvent?.Invoke();
             }

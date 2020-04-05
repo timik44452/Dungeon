@@ -27,8 +27,8 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, postiion, 5F * Time.deltaTime);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5F * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, postiion, 10F * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 10F * Time.deltaTime);
     }
 
     private void Update()
@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
             y += Input.GetAxis("Mouse Y") * rotationSpeed;
         }
 
-        if (targetSystem != null && targetSystem.TargetFix && targetSystem.Target != null)
+        if (!TargetSystem.ITargetIsNull(targetSystem.Target) && targetSystem.TargetFix)
         {
             Quaternion _rotation = Quaternion.LookRotation(targetSystem.Target.transform.position - transform.position);
 

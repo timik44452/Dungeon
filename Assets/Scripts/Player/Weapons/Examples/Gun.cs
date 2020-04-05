@@ -1,31 +1,18 @@
 ﻿using UnityEngine;
 
+[CreateAssetMenu(menuName = "Weapons/Gun")]
 public class Gun : Weapon
 {
-    private void Start()
+    public override void Invoke(Component sender, ITarget target, Skill skill)
     {
-        defaultSkill = ResourceUtility.skillDatabase.GetSkill("gun");
-    }
-
-    private void Update()
-    {
-        reloadingTimer -= Time.deltaTime;
-    }
-
-    public override void Invoke(ITarget target, Skill skill)
-    {
-        if(IsReloading || target == null)
+        if (TargetSystem.ITargetIsNull(target))
         {
             return;
         }
 
-        Skill attackSkill = Skill.CombineSkills(defaultSkill, skill);
-
         foreach (var effectListener in target.gameObject.GetComponents<ISkillEffectListener>())
         {
-            effectListener.EffectInvoke(this, attackSkill.effects);
+            effectListener.EffectInvoke(sender, effects);
         }
-
-        reloadingTimer = attackSkill.reloadingTime;
     }
 }

@@ -12,6 +12,27 @@ public class Inventory : MonoBehaviour
 
     public List<Item> items { get; private set; }
 
+    //TODO: optimize it !!!
+    public List<Weapon> weapons
+    {
+        get
+        {
+            List<Weapon> weapons = new List<Weapon>();
+
+            foreach (var item in items)
+            {
+                var weapon = ResourceUtility.weaponDatabase.weapons.Find(x => x.Name == item.Name);
+
+                if (weapon != null)
+                {
+                    weapons.Add(weapon);
+                }
+            }
+
+            return weapons;
+        }
+    }
+
     private void Start()
     {
         items = new List<Item>();
@@ -23,16 +44,7 @@ public class Inventory : MonoBehaviour
 
         if (item == null)
         {
-            var tempItem = ResourceUtility.inventoryDatabase.items.Find(x => x.ID == itemObject.ID);
-
-            if (tempItem == null)
-            {
-                item = new Item(itemObject.ID, "Secret item");
-            }
-            else
-            {
-                item = new Item(itemObject.ID, tempItem.name);
-            }
+            item = ResourceUtility.inventoryDatabase.GetItem(itemObject.ID);
 
             items.Add(item);
         }

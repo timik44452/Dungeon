@@ -21,12 +21,7 @@ public class SceneUtility
     {
         get
         {
-            if (s_targets == null)
-            {
-                s_targets = FindObjects<ITarget>();
-            }
-
-            s_targets.RemoveAll(x => x == null);
+            s_targets.RemoveAll(x => TargetSystem.ITargetIsNull(x));
 
             return s_targets;
         }
@@ -34,13 +29,13 @@ public class SceneUtility
 
 
     private static GameObject s_player = null;
-    private static List<ITarget> s_targets = null;
+    private static List<ITarget> s_targets = new List<ITarget>();
     private static Dictionary<System.Type, IList> componentRegister = new Dictionary<System.Type, IList>()
     {
         { typeof(ITarget), s_targets }
     };
 
-
+    
     public static void CreateObject(GameObject prototype, Transform parent = null)
     {
         GameObject gameObject;
@@ -53,6 +48,13 @@ public class SceneUtility
         {
             gameObject = Object.Instantiate(prototype, parent);
         }
+
+        RegisterInterfaces(gameObject);
+    }
+
+    public static void CreateObject(GameObject prototype, Vector3 position, Quaternion rotation)
+    {
+        GameObject gameObject = Object.Instantiate(prototype, position, rotation);
 
         RegisterInterfaces(gameObject);
     }
@@ -78,7 +80,9 @@ public class SceneUtility
     {
         foreach (var key in componentRegister)
         {
-            key.Value.Add(gameObject.GetComponent(key.Key));
+            var component = gameObject.GetComponent(key.Key);
+
+            key.Value.Add(component);
         }
     }
 }

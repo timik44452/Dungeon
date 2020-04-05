@@ -73,6 +73,7 @@ public class UIContextMenu : MonoBehaviour
     {
         var tempNode = Instantiate(buttonPrefab.gameObject, root);
         var currentRoot = tempNode.GetElement<Transform>("content");
+        var image = tempNode.GetElement<Image>("icon");
 
         tempNode.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -84,9 +85,11 @@ public class UIContextMenu : MonoBehaviour
             item.Invoke();
         });
 
-        tempNode.GetElement<Text>("text").text = item.Text;
-        tempNode.GetElement<Image>("icon").sprite = item.Icon;
+        image.gameObject.SetActive(item.Icon);
+        image.sprite = item.Icon;
 
+        tempNode.GetElement<Text>("text").text = item.Text;
+        
         foreach (ContextMenuItem menuItem in item.menuItems)
         {
             CreateMenuItemTree(currentRoot, menuItem);

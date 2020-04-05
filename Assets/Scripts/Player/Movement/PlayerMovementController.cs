@@ -59,13 +59,11 @@ public class PlayerMovementController : MonoBehaviour
         verticalAxisController = new AxisDownController();
         horizontalAxisController = new AxisDownController();
 
-        verticalAxisController.OnDownEvent += () => { if (verticalAxisController.pressCount == 2) jerk = 1.0F; };
-        horizontalAxisController.OnDownEvent += () => { if (horizontalAxisController.pressCount == 2) jerk = 1.0F; };
+        verticalAxisController.OnDownEvent += () => { if (verticalAxisController.pressCount % 2 == 0) jerk = 1.0F; };
+        horizontalAxisController.OnDownEvent += () => { if (horizontalAxisController.pressCount % 2 == 0) jerk = 1.0F; };
 
         characterController = GetComponent<CharacterController>();
     }
-
-
 
     private void Update()
     {
@@ -83,7 +81,7 @@ public class PlayerMovementController : MonoBehaviour
 
         if (is_move)
         {
-            direction = Vector3.Lerp(direction, viewForward * vertical + viewRight * horizontal, 5F * Time.deltaTime);
+            direction = Vector3.Lerp(direction, viewForward * vertical + viewRight * horizontal, movementConfiguration.maneurSpeed * Time.deltaTime);
 
             sprint += 3F * sprint * Time.deltaTime;
             move += 3F * Time.deltaTime;
@@ -100,15 +98,10 @@ public class PlayerMovementController : MonoBehaviour
         jerk = Mathf.Clamp01(jerk);
         move = Mathf.Clamp01(move);
 
-        Vector3 force =  
-            move * Mathf.Lerp(movementConfiguration.walkSpeed, movementConfiguration.runSpeed, sprint) * direction +
-            jerk * movementConfiguration.jerkPower * direction;
+        Vector3 jerkForce = jerk * movementConfiguration.jerkPower * direction;
+        Vector3 moveForce = jerkForce + move * Mathf.Lerp(movementConfiguration.walkSpeed, movementConfiguration.runSpeed, sprint) * transform.forward;
 
-        force *= Time.deltaTime;
-
-        force += gravityForce;
-
-        characterController.Move(force);
+        characterController.Move((moveForce + gravityForce) * Time.deltaTime);
 
         if (direction != Vector3.zero)
         {

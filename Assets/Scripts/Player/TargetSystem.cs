@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetSystem : MonoBehaviour
@@ -10,12 +9,6 @@ public class TargetSystem : MonoBehaviour
 
     public bool TargetFix { get; private set;  } = false;
 
-    private List<ITarget> m_targets = null;
-
-    private void Start()
-    {
-        m_targets = new List<ITarget>(SceneUtility.Targets);    
-    }
 
     private void Update()
     {
@@ -42,7 +35,7 @@ public class TargetSystem : MonoBehaviour
 
     private void FindActualTarget()
     {
-        var viewedTargets = m_targets.FindAll(target => CheckTarget_RECTMETHOD(target));
+        var viewedTargets = SceneUtility.Targets.FindAll(target => CheckTarget_RECTMETHOD(target));
 
         float minimalDistance = float.MaxValue;
 
@@ -65,7 +58,7 @@ public class TargetSystem : MonoBehaviour
 
     private void ChangeTarget()
     {
-        var viewedTargets = m_targets.FindAll(target => CheckTarget_ANGLEMETHOD(target));
+        var viewedTargets = SceneUtility.Targets.FindAll(target => CheckTarget_ANGLEMETHOD(target));
 
         int index = 0;
 
