@@ -28,6 +28,17 @@ public class PositionChangedScenario : TutorialScenario
 
         Vector3 currentDelta = target.position - oldPosition;
 
+        if (!useVerticalAxis)
+        {
+            currentDelta.y = 0;
+        }
+
+        if (!useHorizontalAxis)
+        {
+            currentDelta.x = 0;
+            currentDelta.z = 0;
+        }
+
         if (currentDelta.magnitude >= offset)
         {
             if (currentDelta.magnitude / time >= speed)

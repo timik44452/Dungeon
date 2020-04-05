@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7225325c80cf343961a9e21d252610, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  Name: 
-  reloadingTimeout: 1
-  effects: []
-  attackDistance: 1
+  Name: Sword
+  icon: {fileID: 21300000, guid: 88d80bc273336b9469e292915e2d3a45, type: 3}
+  reloadingTimeout: 0.5
+  effects:
+  - {fileID: 11400000, guid: 18ba215862b2b7f479de86e4388869a9, type: 2}
+  attackDistance: 2

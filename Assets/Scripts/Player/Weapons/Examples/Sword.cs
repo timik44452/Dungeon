@@ -7,6 +7,11 @@ public class Sword : Weapon
 
     public override void Invoke(Component sender, ITarget target, Skill skill)
     {
+        if (TargetSystem.ITargetIsNull(target))
+        {
+            return;
+        }
+
         float distance = Vector3.Distance(sender.transform.position, target.transform.position);    
 
         if(distance > attackDistance)

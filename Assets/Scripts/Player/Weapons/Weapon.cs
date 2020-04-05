@@ -3,6 +3,7 @@
 public abstract class Weapon : ScriptableObject
 {
     public string Name;
+    public Sprite icon;
 
     public float reloadingTimeout = 1.0F;
 

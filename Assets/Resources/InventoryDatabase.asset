@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: InventoryDatabase
   m_EditorClassIdentifier: 
   items:
-  - ID: 0
-    name: Small crystall
-    Count: 0
+  - Name: Small crystall
+    ID: 0
+  - Name: Gun
+    ID: 1
+  - Name: Sword
+    ID: 2

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f1b947df53d5648a4b1ee60d54151f, type: 3}
   m_Name: Gun
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Gun
+  icon: {fileID: 21300000, guid: d87a165042be11143a45184a98dda808, type: 3}
   reloadingTimeout: 1
-  effects: []
+  effects:
+  - {fileID: 11400000, guid: 18ba215862b2b7f479de86e4388869a9, type: 2}
