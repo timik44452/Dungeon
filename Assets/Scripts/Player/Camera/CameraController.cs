@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
             y += Input.GetAxis("Mouse Y") * rotationSpeed;
         }
 
-        if (!TargetSystem.ITargetIsNull(targetSystem.Target) && targetSystem.TargetFix)
+        if (targetSystem && !TargetSystem.ITargetIsNull(targetSystem.Target) && targetSystem.TargetFix)
         {
             Quaternion _rotation = Quaternion.LookRotation(targetSystem.Target.transform.position - transform.position);
 

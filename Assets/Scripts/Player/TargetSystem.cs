@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveWorld.Mobs.Core;
+using System;
 using UnityEngine;
 
 public class TargetSystem : MonoBehaviour
@@ -10,11 +11,18 @@ public class TargetSystem : MonoBehaviour
     public bool TargetFix { get; private set;  } = false;
 
 
+    private void Awake()
+    {
+        SceneUtility.Targets.AddRange(SceneUtility.FindObjects<ITarget>());
+    }
+
     private void Update()
     {
+        bool target_isNull = ITargetIsNull(Target);
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (TargetFix || ITargetIsNull(Target))
+            if (TargetFix || target_isNull)
             {
                 ChangeTarget();
             }
@@ -22,7 +30,7 @@ public class TargetSystem : MonoBehaviour
             TargetFix = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || target_isNull)
         {
             TargetFix = false;
         }
@@ -92,7 +100,7 @@ public class TargetSystem : MonoBehaviour
 
     private bool CheckTarget_RECTMETHOD(ITarget target)
     {
-        if (ITargetIsNull(target))
+        if (ITargetIsNull(target) || target.gameObject == SceneUtility.Player)
         {
             return false;
         }
@@ -106,7 +114,7 @@ public class TargetSystem : MonoBehaviour
 
     private bool CheckTarget_ANGLEMETHOD(ITarget target)
     {
-        if (ITargetIsNull(target))
+        if (ITargetIsNull(target) || target.gameObject == SceneUtility.Player)
         {
             return false;
         }
@@ -123,5 +131,17 @@ public class TargetSystem : MonoBehaviour
     public static bool ITargetIsNull(ITarget target)
     {
         return !(target as MonoBehaviour);
+    }
+
+    public static bool ITargetIsNullOrNotInitialized(ITarget target)
+    {
+        return  ITargetIsNull(target) || target.TypeIdentifier == int.MinValue;
+    }
+
+    public static bool IsTargetEquals(ITarget a, ITarget b)
+    {
+        return 
+            (a as MonoBehaviour) == 
+            (b as MonoBehaviour);
     }
 }

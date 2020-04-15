@@ -6,10 +6,20 @@ namespace LiveWorld.Mobs
 {
     public class Skeleton
     {
-        public Vector3 center { get; private set; }
+        public Vector3 center
+        {
+            get
+            {
+                RecalculateCenter();
+
+                return m_center;
+            }
+        }
 
         private List<MobJoint> joints;
         private List<Bone> bones;
+
+        private Vector3 m_center;
 
         public Skeleton()
         {
@@ -20,8 +30,6 @@ namespace LiveWorld.Mobs
         public void AddJoint(MobJoint joint)
         {
             joints.Add(joint);
-
-            RecalculateCenter();
         }
 
         public void AddBone(Bone bone)
@@ -52,6 +60,13 @@ namespace LiveWorld.Mobs
             }
         }
 
+        public bool TryGetJoint(string name, out MobJoint joint)
+        {
+            joint = joints.Find(x => x.Name == name);
+
+            return joint != null;
+        }
+
         public bool TryGetJoint(Bone bone, out MobJoint from, out MobJoint to)
         {
             to = null;
@@ -68,11 +83,15 @@ namespace LiveWorld.Mobs
 
         public void RecalculateCenter()
         {
-            float centerX = joints.Average(x => x.localPosition.x);
-            float centerY = joints.Average(x => x.localPosition.x);
-            float centerZ = joints.Average(x => x.localPosition.x);
+            m_center = Vector3.zero;
 
-            center = new Vector3(centerX, centerY, centerZ);
+            if (joints.Count > 0)
+            {
+                foreach (var joint in joints)
+                    m_center += joint.localPosition;
+
+                m_center /= joints.Count;
+            }
         }
     }
 }

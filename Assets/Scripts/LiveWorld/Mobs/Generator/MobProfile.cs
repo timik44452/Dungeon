@@ -1,4 +1,6 @@
-﻿namespace LiveWorld.Mobs
+﻿using LiveWorld.Mobs.Core;
+
+namespace LiveWorld.Mobs
 {
     public class MobProfile
     {

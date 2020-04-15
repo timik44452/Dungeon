@@ -6,12 +6,22 @@ public class WeaponFastslotUIController : MonoBehaviour
 {
     public GameObject[] slots;
 
+    private Color alphaColor;
+    private Color color;
+
     private void Awake()
     {
-        foreach (var slot in slots)
+        for (int index = 0; index < slots.Length; index++)
         {
-            slot.SetActive(false);
+            if (slots[index] == null)
+            {
+                continue;
+            }
+
+            color = slots[index].GetElement<Image>("icon").color;
         }
+
+        alphaColor = color * new Color(1F, 1F, 1F, 0.35F);
     }
 
     private void FixedUpdate()
@@ -26,19 +36,28 @@ public class WeaponFastslotUIController : MonoBehaviour
 
         List<Weapon> weapons = inventory.weapons;
 
-        for (int index = 0; index < Mathf.Min(4, weapons.Count); index++)
+        for (int index = 0; index < slots.Length; index++)
         {
-            if(weapons[index] == battleSystem.currentWeapon)
+            var icon = slots[index].GetElement<Image>("icon");
+
+            if (index < weapons.Count)
             {
-                slots[index].transform.localScale = Vector3.one * 1.1F;
+                if (weapons[index] == battleSystem.currentWeapon)
+                {
+                    slots[index].transform.localScale = Vector3.one * 1.1F;
+                }
+                else
+                {
+                    slots[index].transform.localScale = Vector3.one;
+                }
+
+                icon.sprite = weapons[index].icon;
+                icon.color = color;
             }
             else
             {
-                slots[index].transform.localScale = Vector3.one;
+                icon.color = alphaColor;
             }
-
-            slots[index].GetElement<Image>("icon").sprite = weapons[index].icon;
-            slots[index].SetActive(true);
         }
     }
 }

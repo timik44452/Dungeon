@@ -21,9 +21,7 @@ public class SceneUtility
     {
         get
         {
-            s_targets.RemoveAll(x => TargetSystem.ITargetIsNull(x));
-
-            return s_targets;
+            return s_targets.FindAll(x => !TargetSystem.ITargetIsNullOrNotInitialized(x));
         }
     }
 

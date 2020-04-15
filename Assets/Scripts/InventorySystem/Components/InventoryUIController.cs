@@ -8,10 +8,16 @@ using System.Collections.Generic;
 public class InventoryUIController : MonoBehaviour
 {
     public UIContextMenu mainContexMenu;
-    public GameObject actionUIElement;
 
-    private Inventory inventory;
-    private PickUpController pickUpController;
+    #region UIElements
+    public GameObject actionUIElement;
+    public GameObject healthBar;
+    public GameObject powerBar;
+
+    private Image m_healthImage;
+    private Image m_powerBarImage;
+    private Image m_actionUIElementImage;
+    #endregion
 
     #region Context menu items
     private ContextMenuItem inventoryItem;
@@ -21,8 +27,15 @@ public class InventoryUIController : MonoBehaviour
     private ContextMenuItem[] items;
     #endregion
 
+    #region Components
+    private Health health;
+    private Inventory inventory;
+    private PickUpController pickUpController;
+    #endregion
+
     private void Start()
     {
+        health = GetComponent<Health>();
         inventory = GetComponent<Inventory>();
         pickUpController = GetComponent<PickUpController>();
 
@@ -31,6 +44,10 @@ public class InventoryUIController : MonoBehaviour
         inventoryItem = new ContextMenuItem("Inventory", ResourceUtility.resourceDatabase.inventoryIconSprite);
         skillsItem = new ContextMenuItem("Skills", ResourceUtility.resourceDatabase.skillIconSprite);
         weaponsItem = new ContextMenuItem("Weapons", ResourceUtility.resourceDatabase.weaponIconSprite);
+
+        m_actionUIElementImage = actionUIElement.GetElement<Image>("circle");
+        m_healthImage = healthBar.GetElement<Image>("value");
+        m_powerBarImage = powerBar.GetElement<Image>("value");
 
         items = new ContextMenuItem[]
         {
@@ -101,8 +118,6 @@ public class InventoryUIController : MonoBehaviour
             }
         }
 
-        var image = actionUIElement.GetElement<Image>("circle");
-
-        image.fillAmount = pickUpController.PickUpProgress;
+        m_actionUIElementImage.fillAmount = pickUpController.PickUpProgress;
     }
 }

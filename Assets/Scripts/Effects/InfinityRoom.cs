@@ -16,7 +16,7 @@ public class InfinityRoom : MonoBehaviour
     {
         columns = new Dictionary<Vector3, GameObject>();
 
-        foreach (Vector3 point in GetPoints(Vector3.zero))
+        foreach (Vector3 point in GetPoints())
         {
             columns.Add(point, Instantiate(column, point, Quaternion.identity));
         }
@@ -45,13 +45,13 @@ public class InfinityRoom : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        foreach (Vector3 point in GetPoints(Vector3.zero))
+        foreach (Vector3 point in GetPoints())
         {
             Gizmos.DrawLine(point, point + Vector3.up);
         }
     }
 
-    private IEnumerable<Vector3> GetPoints(Vector3 position)
+    private IEnumerable<Vector3> GetPoints()
     {
         Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
 

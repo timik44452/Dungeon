@@ -16,38 +16,19 @@ namespace LiveWorld.Mobs
                 return TriangleCollection.Empty;
             }
 
-            triangles.Add(new Triangle(vertices[0], vertices[1], vertices[2]));
-
-            //for (int index = 3; index < vertices.Count; index++)
-            int index = 3;
-            {
-                var tempPoint = vertices[index];
-                var tempTris = new List<Triangle>();
-
-                foreach (Triangle triangle in triangles)
-                {
-                    if (triangle.IsViewedEdge(Triangle.Edge.AB, tempPoint)) 
-                        tempTris.Add(new Triangle(tempPoint, triangle.a, triangle.b));
-
-                    if (triangle.IsViewedEdge(Triangle.Edge.BC, tempPoint))
-                        tempTris.Add(new Triangle(tempPoint, triangle.b, triangle.c));
-
-                    if (triangle.IsViewedEdge(Triangle.Edge.CA, tempPoint))
-                        tempTris.Add(new Triangle(tempPoint, triangle.c, triangle.a));
-                }
-
-                triangles.AddRange(tempTris);
-            }
+            
 
             return new TriangleCollection(triangles);
         }
-        public static IEnumerable<Vector3> CreateShapePoints(MobConfiguration configuration, Skeleton skeleton)
+
+        public static IEnumerable<Vector3> CreateShapePoints(Skeleton skeleton)
         {
             float step = 0.1F;
 
             List<Vector3> vertices = new List<Vector3>();
+            List<MobJoint> joints = new List<MobJoint>(skeleton.GetJoints());
 
-            foreach (var joint in skeleton.GetJoints())
+            foreach (var joint in joints)
             {
                 Vector3 center = joint.localPosition;
 
@@ -61,7 +42,11 @@ namespace LiveWorld.Mobs
 
                         Vector3 point = center + new Vector3(x, y, z);
 
-                        vertices.Add(point);
+                        if (joints.Find(_x => _x != joint && Vector3.Distance(point, _x.localPosition) < 1) == null &&
+                            vertices.Find(_x => _x == point) == default)
+                        {
+                            vertices.Add(point);
+                        }
                     }
                 }
             }
@@ -96,23 +81,32 @@ namespace LiveWorld.Mobs
             return mesh;
         }
 
-        #region Math utility
-        public static bool AngleMore90(Vector3 a, Vector3 b)
+        public static Skeleton SkeletonFromTransform(Transform transform)
         {
-            float temp = (a.magnitude * b.magnitude);
+            Skeleton skeleton = new Skeleton();
 
-            if (temp == 0)
+            foreach (var joint in transform.GetComponentsInChildren<Transform>())
             {
-                return false;
+                if (joint == transform)
+                {
+                    continue;
+                }
+
+                Vector3 position = joint.position - transform.position;
+
+                skeleton.AddJoint(new MobJoint(joint.name, position, joint.name.Contains("Foot")));
+
+                if (joint.parent != transform)
+                {
+                    float boneLength = Vector3.Distance(joint.parent.transform.position, joint.transform.position);
+
+                    Bone bone = new Bone(boneLength, joint.parent.name, joint.name);
+
+                    skeleton.AddBone(bone);
+                }
             }
 
-            return (a.x * b.x + a.y * b.y + a.z * b.z) / temp < 0;
+            return skeleton;
         }
-
-        private static float Max(params float[] values)
-        {
-            return values.Max();
-        }
-        #endregion
     }
 }

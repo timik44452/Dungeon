@@ -3,9 +3,11 @@
 using Player.Movement;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovementController : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour, ITarget
 {
     public PlayeMovementConfiguration movementConfiguration;
+
+    public int TypeIdentifier => int.MaxValue;
 
     private const float inputThresold = 0.05F;
 
@@ -31,12 +33,10 @@ public class PlayerMovementController : MonoBehaviour
             return direction;
         }
     }
-
     private float vertical
     {
         get => Input.GetAxis("Vertical");
     }
-
     private float horizontal
     {
         get => Input.GetAxis("Horizontal");
