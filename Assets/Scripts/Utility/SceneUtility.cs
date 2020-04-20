@@ -25,6 +25,7 @@ public class SceneUtility
         }
     }
 
+    public static bool IsDebug { get; set; }
 
     private static GameObject s_player = null;
     private static List<ITarget> s_targets = new List<ITarget>();

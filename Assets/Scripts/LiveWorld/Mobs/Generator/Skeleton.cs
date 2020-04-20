@@ -27,14 +27,29 @@ namespace LiveWorld.Mobs
             bones = new List<Bone>();
         }
 
-        public void AddJoint(MobJoint joint)
+        public void AddJoint(params MobJoint[] joints)
         {
-            joints.Add(joint);
+            this.joints.AddRange(joints);
         }
 
-        public void AddBone(Bone bone)
+        public void AddBone(string from, string to)
         {
-            bones.Add(bone);
+            var fromJoint = joints.Find(x => x.Name == from);
+            var toJoint = joints.Find(x => x.Name == to);
+
+            if (fromJoint == null || toJoint == null)
+            {
+                return;
+            }
+
+            Bone bone = new Bone(Vector3.Distance(fromJoint.localPosition, toJoint.localPosition), from, to);
+
+            AddBone(bone);
+        }
+
+        public void AddBone(params Bone[] bones)
+        {
+            this.bones.AddRange(bones);
         }
 
         public IEnumerable<Bone> GetBones()
@@ -91,6 +106,28 @@ namespace LiveWorld.Mobs
                     m_center += joint.localPosition;
 
                 m_center /= joints.Count;
+            }
+        }
+
+        public void DrawGizmos(Vector3 position, bool drawBones, bool drawJoints, float radius = 1F)
+        {
+            if (drawJoints)
+            {
+                foreach (var joint in GetJoints())
+                {
+                    Gizmos.DrawSphere(position + joint.localPosition, radius);
+                }
+            }
+
+            if (drawBones)
+            {
+                foreach (var bone in GetBones())
+                {
+                    if (TryGetJoint(bone, out MobJoint from, out MobJoint to))
+                    {
+                        Gizmos.DrawLine(position + from.localPosition, position + to.localPosition);
+                    }
+                }
             }
         }
     }

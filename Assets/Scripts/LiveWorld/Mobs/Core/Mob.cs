@@ -146,7 +146,7 @@ namespace LiveWorld.Mobs.Core
                 float fear_delta = old_fear - memory.feeling["fear"];
                 float fear_agression = old_agression - memory.feeling["agression"];
 
-                memory.feeling["interest"] += (fear_delta + fear_agression) - s;
+                memory.feeling["interest"] += fear_delta + fear_agression - s;
             }
             else if(memory.lastActionType > 0)
             {
@@ -179,5 +179,28 @@ namespace LiveWorld.Mobs.Core
             transform.position -= (transform.position - target.transform.position).normalized * Time.deltaTime;
         }
         #endregion
+
+        public void OnGUI()
+        {
+            if (!SceneUtility.IsDebug)
+            {
+                return;
+            }
+
+            float lineHeight = GUI.skin.label.lineHeight * 2;
+            Vector2 point = Camera.main.WorldToScreenPoint(transform.position);
+
+            point.y = Screen.height - point.y;
+
+            int index = 0;
+
+            foreach(var memory in memories)
+            {
+                Rect rect = new Rect(point.x, point.y + lineHeight * index, Screen.width, lineHeight);
+                GUI.Label(rect, $"TYPE#{memory.Key}:{memory.Value.feeling}");
+                
+                index++;
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using LiveWorld.Mobs.Core;
+using LiveWorld.Mobs.Core.BehaviourModels.Examples;
 
 [RequireComponent(typeof(CharacterController))]
 public class Wolf : Mob
@@ -17,7 +18,17 @@ public class Wolf : Mob
 
     private void Start()
     {
+        DNA dna = new DNA(0, 1, 2, 3);
+
+        MobConfiguration configuration = new MobConfiguration();
+        AgressiveBehaviourModel model = new AgressiveBehaviourModel(dna);
+
+        configuration.fieldOfView = 75;
+        configuration.eyePower = 1.0F;
+
         characterController = GetComponent<CharacterController>();
+
+        Initialize(configuration, model);
     }
 
     private void Update()
@@ -28,7 +39,7 @@ public class Wolf : Mob
 
         Vector3 force = gravitationForce + transform.forward * speed;
 
-        characterController.Move(force);
+        characterController.Move(force * Time.deltaTime);
 
         if (characterController.isGrounded)
         {

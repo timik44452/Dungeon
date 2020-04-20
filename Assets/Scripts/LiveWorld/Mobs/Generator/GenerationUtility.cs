@@ -8,7 +8,7 @@ namespace LiveWorld.Mobs
     {
         public static TriangleCollection Triangulation(IEnumerable<Vector3> shape)
         {
-            List<Vector3> vertices = new List<Vector3>(shape);
+            //List<Vector3> vertices = new List<Vector3>(shape);
             List<Triangle> triangles = new List<Triangle>();
 
             if (shape.Count() < 3)
