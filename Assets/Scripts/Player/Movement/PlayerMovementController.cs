@@ -3,7 +3,7 @@
 using Player.Movement;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovementController : MonoBehaviour, ITarget
+public class PlayerMovementController : NetworkUnit, ITarget
 {
     public PlayeMovementConfiguration movementConfiguration;
 
@@ -33,6 +33,7 @@ public class PlayerMovementController : MonoBehaviour, ITarget
             return direction;
         }
     }
+
     private float vertical
     {
         get => Input.GetAxis("Vertical");
@@ -41,6 +42,7 @@ public class PlayerMovementController : MonoBehaviour, ITarget
     {
         get => Input.GetAxis("Horizontal");
     }
+
 
     private CharacterController characterController;
 
@@ -63,10 +65,15 @@ public class PlayerMovementController : MonoBehaviour, ITarget
         horizontalAxisController.OnDownEvent += () => { if (horizontalAxisController.pressCount % 2 == 0) jerk = 1.0F; };
 
         characterController = GetComponent<CharacterController>();
+
+        NetworkSpawner.Spawn(this);
     }
 
     private void Update()
     {
+        if (!isReal)
+            return;
+
         bool is_move =
             Mathf.Abs(vertical) > inputThresold ||
             Mathf.Abs(horizontal) > inputThresold;

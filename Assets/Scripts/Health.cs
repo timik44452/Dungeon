@@ -19,7 +19,7 @@ public class Health : MonoBehaviour, ISkillEffectListener
     private Protection.SafeFloat safe_health;
 
 
-    private void Start()
+    private void Awake()
     {
         safe_health = new Protection.SafeFloat(initHealth);
     }

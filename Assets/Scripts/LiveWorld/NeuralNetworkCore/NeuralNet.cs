@@ -14,8 +14,8 @@ namespace LiveWorld.NeuralNetworkCore
 
 		public NeuralNet(int inputSize, int hiddenSize, int outputSize, int numHiddenLayers = 1, float? learnRate = null, float? momentum = null)
 		{
-			LearnRate = learnRate ?? .4F;
-			Momentum = momentum ?? .9F;
+			LearnRate = learnRate ?? 0.4F;
+			Momentum = momentum ?? 0.9F;
 
 			InputLayer = new List<Neuron>();
 			HiddenLayers = new List<List<Neuron>>();
@@ -114,5 +114,4 @@ namespace LiveWorld.NeuralNetworkCore
 		Epoch,
 		MinimumError
 	}
-
 }
