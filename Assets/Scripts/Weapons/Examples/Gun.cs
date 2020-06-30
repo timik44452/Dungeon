@@ -3,7 +3,7 @@
 [CreateAssetMenu(menuName = "Weapons/Gun")]
 public class Gun : Weapon
 {
-    public override void Invoke(Component sender, ITarget target, Skill skill)
+    public override void BeginInvoke(Component sender, ITarget target, Skill skill)
     {
         if (TargetSystem.ITargetIsNull(target))
         {

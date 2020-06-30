@@ -42,7 +42,7 @@ public class BattleSystem : MonoBehaviour
             if (Input.GetKeyDown($"{keyIndex}"))
             {
                 currentWeapon = weapons[i];
-                Attack();
+                BeginInvoke();
             }
         }
 
@@ -75,7 +75,12 @@ public class BattleSystem : MonoBehaviour
 
         if(Input.GetMouseButtonDown(1))
         {
-            Attack();
+            BeginInvoke();
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            EndInvoke();
         }
     }
 
@@ -87,13 +92,23 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void Attack()
+    public void BeginInvoke()
     {
         if (currentWeapon == null || m_targetSystem == null)
         {
             return;
         }
 
-        currentWeapon.Invoke(this, m_targetSystem.Target, null);
+        currentWeapon.BeginInvoke(this, m_targetSystem.Target, null);
+    }
+
+    public void EndInvoke()
+    {
+        if (currentWeapon == null || m_targetSystem == null)
+        {
+            return;
+        }
+
+        currentWeapon.EndInvoke(this, m_targetSystem.Target, null);
     }
 }

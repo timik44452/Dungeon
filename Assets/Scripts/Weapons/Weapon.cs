@@ -9,5 +9,13 @@ public abstract class Weapon : ScriptableObject
 
     public SkillEffect[] effects;
 
-    public abstract void Invoke(Component sender, ITarget target, Skill skill);
+    public virtual void BeginInvoke(Component sender, ITarget target, Skill skill)
+    {
+
+    }
+
+    public virtual void EndInvoke(Component sender, ITarget target, Skill skill)
+    {
+
+    }
 }

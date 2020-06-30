@@ -5,7 +5,7 @@ public class Sword : Weapon
 {
     public float attackDistance = 1.0F;
 
-    public override void Invoke(Component sender, ITarget target, Skill skill)
+    public override void BeginInvoke(Component sender, ITarget target, Skill skill)
     {
         if (TargetSystem.ITargetIsNull(target))
         {
